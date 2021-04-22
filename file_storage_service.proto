@@ -1,5 +1,5 @@
 syntax = "proto3";
-option go_package = "github.com/riversy/file-storage-server";
+option go_package = "github.com/riversy/file-storage-server/service";
 
 import "google/protobuf/timestamp.proto";
 
@@ -39,7 +39,7 @@ message FileMetaList {
   repeated FileMeta files = 1;
 }
 
-service FileService {
+service FilesService {
   rpc PutFile(File) returns (FileUploadStatus);
   rpc GetAllFilesMeta(FilesRequest) returns (stream FileMeta);
   rpc GetAllFilesMetaSync(FilesRequest) returns (FileMetaList);
