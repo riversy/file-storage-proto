@@ -1,0 +1,46 @@
+syntax = "proto3";
+option go_package = "github.com/riversy/file-storage-server";
+
+import "google/protobuf/timestamp.proto";
+
+package file_service;
+
+message FileMeta {
+  string name = 1;
+  string type = 2;
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp updated_at = 4;
+}
+
+message FileContent {
+  bytes content = 1;
+}
+
+message File {
+  FileContent content = 1;
+  FileMeta meta = 2;
+}
+
+message FilesRequest {
+}
+
+message FileUploadStatus {
+  enum StatusList {
+    UPLOAD_ERR_OK = 0;
+    UPLOAD_ERR_SIZE = 1;
+    UPLOAD_ERR_PARTIAL = 2;
+    UPLOAD_ERR_NO_FILE = 3;
+    UPLOAD_ERR_CANT_WRITE = 4;
+  }
+  StatusList status = 1;
+}
+
+message FileMetaList {
+  repeated FileMeta files = 1;
+}
+
+service FileService {
+  rpc PutFile(File) returns (FileUploadStatus);
+  rpc GetAllFilesMeta(FilesRequest) returns (stream FileMeta);
+  rpc GetAllFilesMetaSync(FilesRequest) returns (FileMetaList);
+}
